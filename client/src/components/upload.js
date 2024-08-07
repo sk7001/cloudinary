@@ -30,7 +30,7 @@ export default function Upload() {
             const response = await axios.post("http://localhost:1000/api/upload", { file })
             toast.dismiss();
             toast.success(response.data.message)
-            console.log(response.data.faceData)
+            console.log(response.data)
         } catch (error) {
             console.log(error);
             toast.dismiss();
