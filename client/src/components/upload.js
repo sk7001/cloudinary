@@ -4,18 +4,18 @@ import toast from 'react-hot-toast';
 
 export default function Upload() {
     const [file, setfile] = useState(null);
+    const [final, setfinal]= useState("./logo192.png")
     function previewfile(file) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
             setfile(reader.result);
         }
-        
     }
     const handleOnChange = (event) => {
         const file = event.target.files[0]
         console.log(file.size)
-        if(file.size>1048576){
+        if (file.size > 1048576) {
             return toast.error("Please upload image under 10MB.")
         }
         setfile(file);
@@ -30,7 +30,8 @@ export default function Upload() {
             const response = await axios.post("http://localhost:1000/api/upload", { file })
             toast.dismiss();
             toast.success(response.data.message)
-            console.log(response.data)
+            setfinal(response.data.result.url)
+            console.log(response.data.result.url)
         } catch (error) {
             console.log(error);
             toast.dismiss();
@@ -41,8 +42,8 @@ export default function Upload() {
         <div>
             <h1>Upload</h1>
             <input type='file' accept='image/png, image/jpeg' onChange={handleOnChange} />
-            <button onClick={handleOnClick}>Submit</button><br/>
-            {file && <img src={file} style={{height:"100px", aspectRatio:'1/1', objectFit:"cover"}} alt='profilepic' />}
+            <button onClick={handleOnClick}>Submit</button><br />
+            {final && <img src={final} style={{ height: "100px", aspectRatio: '1/1', objectFit: "cover" }} alt='profilepic' />}
         </div>
     )
 }
